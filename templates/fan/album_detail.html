@@ -1,0 +1,113 @@
+{% extends 'fan/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>{{ album.name }}信息</h2>
+        <table class="table">
+            <tr>
+                <td>专辑名称</td>
+                <td style="color: red;font-size: 20px">{{ album.name }}</td>
+            </tr>
+            <tr>
+                <td>发行日期</td>
+                <td>{{ album.release_date }}</td>
+            </tr>
+            <tr>
+                <td>专辑描述</td>
+                <td>{{ album.description }}</td>
+            </tr>
+            <tr>
+                <td>评分</td>
+                <td>{{ album.average_rating }}</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    {% if album.like %}
+                        <button class="btn btn-default" role="button" onclick="like({{ album.id }})" id='like_button'>
+                            Unlike
+                        </button>
+                    {% else %}
+                        <button class="btn btn-default" role="button" onclick="like({{ album.id }})" id="like_button">
+                            Like
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>专辑歌曲</td>
+                <td>
+                    <ul>
+                        {% for song in album.song_set.all %}
+                            <li><a href="/app/fan/song/{{ song.id }}">{{ song.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-8 news" style="margin-left: 10%">
+        <form method="post" action="/app/fan/add_review/{{ album.id }}">
+            {% csrf_token %}
+            <div style="margin-top: 3%">
+                <div class="form-group">
+                    <label for="merchant_comment" style="font-size: x-large">评论：</label>
+                    {% if album.review %}
+                        <textarea class="form-control" name="content" rows="3" disabled>您已评价过</textarea>
+                    {% else %}
+                        <textarea class="form-control" name="content" rows="3"></textarea>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="merchant_comment" style="font-size: x-large">打分：</label>
+                    <select class="form-control" name="rating">
+                        <option value="1">1分</option>
+                        <option value="2">2分</option>
+                        <option value="3">3分</option>
+                        <option value="4">4分</option>
+                        <option value="5">5分</option>
+                        <option value="6">6分</option>
+                        <option value="7">7分</option>
+                        <option value="8">8分</option>
+                        <option value="9">9分</option>
+                        <option value="10">10分</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">提交</button>
+            </div>
+        </form>
+        <div>
+
+            {% for comment in comments %}
+                <h4 style="color: red">用户{{ comment.fan.name }}： </h4>
+                <h5 style="color: red">打分:{{ comment.rating }}</h5>
+                <p>  {{ comment.create_time }}</p>
+                <p>  {{ comment.comment }}</p>
+            {% endfor %}
+            <br>
+
+        </div>
+    </div>
+
+    <script>
+        function like(item_id) {
+            $.get('/app/fan/like_album/' + item_id, function (response) {
+                if (response.status = 'success') {
+                    let likeButton = $('#like_button');
+                    let buttonText = likeButton.text();
+                    let trimmedText = buttonText.trim();
+                    likeButton.text(trimmedText);
+                    if (likeButton.text() === 'Like') {
+                        likeButton.text('Unlike');
+                    } else {
+                        likeButton.text('Like');
+                    }
+
+                } else {
+                    window.location.href = '/login';
+                }
+            });
+        }
+    </script>
+
+
+{% endblock %}

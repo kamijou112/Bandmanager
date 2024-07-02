@@ -1,0 +1,61 @@
+{% extends 'fan/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>{{ song.name }}信息</h2>
+        <table class="table">
+            <tr>
+                <th>歌曲名</th>
+                <td style="color: red;font-size: 20px">{{ song.name }}</td>
+            </tr>
+            <tr>
+                <th>作者</th>
+                <td>{{ song.authors }}</td>
+            </tr>
+            <tr>
+                <th>专辑</th>
+                <td><a href="/app/fan/album/{{ song.album.id }}">{{ song.album }}</a></td>
+            </tr>
+            <tr>
+                <th>乐队</th>
+                <td><a href="/app/fan/band/{{ song.album.band.id }}">{{ song.album.band }}</a></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    {% if song.like %}
+                        <button class="btn btn-default" role="button" onclick="like({{ song.id }})" id='like_button'>
+                            Unlike
+                        </button>
+                    {% else %}
+                        <button class="btn btn-default" role="button" onclick="like({{ song.id }})" id="like_button">
+                            Like
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <script>
+        function like(item_id) {
+            $.get('/app/fan/like_song/' + item_id, function (response) {
+                if (response.status = 'success') {
+                    let likeButton = $('#like_button');
+                    let buttonText = likeButton.text();
+                    let trimmedText = buttonText.trim();
+                    likeButton.text(trimmedText);
+                    if (likeButton.text() === 'Like') {
+                        likeButton.text('Unlike');
+                    } else {
+                        likeButton.text('Like');
+                    }
+
+                } else {
+                    window.location.href = '/login';
+                }
+            });
+        }
+    </script>
+{% endblock %}

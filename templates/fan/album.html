@@ -1,0 +1,45 @@
+{% extends  'fan/base.html' %}
+{% block content %}
+    <form class="form-inline" method="GET" action="/app/fan/album/" style="margin-left: 30%;margin-top: 5%">
+        <input class="form-control" type="search" aria-label="搜索" name="keyword" style="width:50%"
+               {% if keyword %}value="{{ keyword }}"{% endif %} id="search-input">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+    </form>
+    <div class="container mt-5">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>专辑名称</th>
+                <th>发表时间</th>
+                <th>文案</th>
+                <th>所属乐队</th>
+                <th>评分</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for album in albums %}
+                <tr>
+                    <td><a href="/app/fan/album/{{ album.id }}">{{ album.name }}</a></td>
+                    <td>{{ album.release_date }}</td>
+                    <td>{{ album.description }}</td>
+                    <td>{{ album.band.name }}</td>
+                    <td>{{ album.average_rating }}</td>
+                    <td>
+                        <a href="/app/fan/album/{{ album.id }}" class="btn btn-info">查看详细信</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

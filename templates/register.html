@@ -1,0 +1,71 @@
+{% load static %}
+<html lang="zh">
+
+<head>
+    <link href="/static/css/tailwind.min.css" rel="stylesheet"/>
+    <link href="/static/css/css2.css"
+          rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+    </style>
+    <script src="/static/js/alpine.js" defer></script>
+    <title>乐队管理系统</title>
+</head>
+
+<body class="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+<div class="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+    <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
+
+        <div class="mt-1 flex flex-col items-center">
+            <h1 class="text-2xl xl:text-3xl font-extrabold">
+                注册页面
+            </h1>
+            <div class="w-full flex-1 mt-6">
+                <form action="/app/register/" method="post" enctype="application/x-www-form-urlencoded"
+                      class="mx-auto max-w-md">
+                    {% csrf_token %}
+                    {% if msg %}
+                        <p style="color: red">{{ msg }}</p>
+                    {% endif %}
+
+                    <input
+                            class="w-full px-4 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                            type="text" placeholder="请输入用户名" name="username" required/>
+                    <span style="color: red; padding-left: 10px">{{ error.username.0 }}</span>
+                    <input
+                            class="w-full px-4 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                            type="password" placeholder="请输入密码" name="password" required/>
+                    <span style="color: red; padding-left: 10px">{{ password_error }}</span>
+                    <span style="color: red; padding-left: 10px">{{ error.password.0 }}</span>
+                    <input
+                            class="w-full px-4 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                            type="password" placeholder="请确认密码" name="password_again"/>
+                    <button type="submit"
+                            class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                        <svg class="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <path d="M20 8v6M23 11h-6"></path>
+                        </svg>
+                        <span class="ml-3">
+                                注册
+                            </span>
+                    </button>
+                </form>
+            </div>
+            <h4 class=" text-xl font-normal">
+                已有账号? 去 <a href="/app/login/" style="color: #0652DD">登录</a>
+            </h4>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+
+
+</html>

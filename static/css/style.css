@@ -1,0 +1,133 @@
+/* Add your custom styles here */
+body {
+    background-color: #f8f9fa;
+}
+
+/* styles.css */
+
+.large-input {
+    width: 600px;
+    border-radius: 10px
+}
+
+.container {
+    max-width: 960px;
+}
+
+.form-group {
+    margin-right: 10px;
+}
+
+
+.thumbnail {
+    min-height: 280px; /* Adjust the minimum height of the thumbnail */
+}
+
+/* Add more styles as needed */
+#my_nav {
+    margin-top: 3%;
+
+}
+
+#productCarousel {
+    margin-top: 3%;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+
+.my_danger {
+    color: red;
+}
+
+.product-container {
+    width: 100%;
+    height: 400px;
+}
+
+/* Add this CSS to your stylesheet or in a style tag in the HTML */
+.thumbnail img {
+    width: 100%; /* Ensure the image takes the full width of its container */
+    height: 200px; /* Set a fixed height for all images */
+    object-fit: cover; /* Ensure images maintain their aspect ratio and cover the container */
+}
+
+.caption {
+    height: 100px; /* Set a fixed height for the caption to ensure consistency */
+}
+
+/* Adjust these values based on your design preferences */
+
+.carousel-control.left::before,
+.carousel-control.right::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    top: 50%;
+    margin-top: -10px; /* Half of the triangle height */
+}
+
+.carousel-control.left::before {
+    left: 50px; /* Adjust the left position as needed */
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+.carousel-control.right::before {
+    right: 50px; /* Adjust the right position as needed */
+    border-width: 10px 0 10px 15px;
+    border-color: transparent transparent transparent #fff;
+}
+
+#cart_container {
+    margin-top: 3%;
+}
+
+#login_form {
+    margin-top: 10%;
+}
+
+.login_body {
+    background-image: url('/static/images/img.png'); /* Replace with the path to your background image */
+    background-size: cover; /* Adjust the background size as needed */
+    background-repeat: no-repeat;
+    height: 100vh; /* Ensure the background covers the entire viewport height */
+    margin: 0; /* Remove default margin */
+
+}

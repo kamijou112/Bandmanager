@@ -1,0 +1,107 @@
+{% extends  'band/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h2 class="mb-4">《{{ album.name }}》歌曲管理</h2>
+        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addSongModal">
+            添加歌曲
+        </button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>词曲作者</th>
+                <th>所属专辑</th>
+                <th>详细信息</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for song in songs %}
+                <tr>
+                    <td>{{ song.id }}</td>
+                    <td>{{ song.name }}</td>
+                    <td>{{ song.authors }}</td>
+                    <td>{{ song.album.name }}</td>
+                    <td><a href="/app/song/fan/{{ song.id }}" class="btn btn-info">喜欢的粉丝</a></td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#editSongModal{{ song.id }}">
+                            Edit
+                        </button>
+                        <a href="/app/album/song/delete/{{ song.id }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <div class="modal fade" id="editSongModal{{ song.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="editSongModalLabel{{ song.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editSongModalLabel{{ song.id }}">Edit Song</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/app/album/song/edit/{{ song.id }}">
+                                    {% csrf_token %}
+                                    <label for="editSongName">歌曲名称：</label>
+                                    <input type="text" id="editSongName" name="song_name" value="{{ song.name }}"
+                                           class="form-control" required>
+
+                                    <label for="editAuthors">词曲作者：</label>
+                                    <input type="text" id="editAuthors" name="authors" value="{{ song.authors }}"
+                                           class="form-control" required>
+
+                                    <button type="submit" class="btn btn-primary mt-2">保存修改</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="modal fade" id="addSongModal" tabindex="-1" role="dialog" aria-labelledby="addSongModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSongModalLabel">Add Song</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="/app/album/song/{{ album.id }}">
+                            {% csrf_token %}
+                            <label for="addSongName">歌曲名称：</label>
+                            <input type="text" id="addSongName" name="song_name" class="form-control" required>
+
+                            <label for="addAuthors">词曲作者：</label>
+                            <input type="text" id="addAuthors" name="authors" class="form-control" required>
+
+                            <button type="submit" class="btn btn-primary mt-2">Add Song</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+```

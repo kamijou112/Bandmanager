@@ -1,0 +1,47 @@
+{% extends  'band/base.html' %}
+{% block content %}
+    <div style="width: 50%; margin: 2px auto">
+        <h1>乐队信息</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_name">名称</label>
+                <input type="text" class="form-control" id="id_name" name="name" value="{{ band.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_formation_date">成立时间</label>
+                <input type="date" class="form-control" id="id_formation_date" name="formation_date"
+                       value="{{ band.formation_date|date:'Y-m-d' }}" required>
+
+            </div>
+
+            <div class="form-group">
+                <label for="id_introduction">介绍</label>
+                <textarea class="form-control" id="id_introduction" name="introduction"
+                          rows="3" required>{{ band.introduction }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="id_captain">队长</label>
+                <select class="form-control" id="id_captain" name="captain">
+                    {% for member in band.bandmember_set.all %}
+                        <option value="{{ member.id }}"
+                                {% if member.id == band.captain_id %}selected{% endif %}>{{ member.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="id_member_count">成员人数</label>
+                <input type="number" class="form-control" id="id_member_count" name="member_count"
+                       value="{{ band.member_count }}" disabled>
+            </div>
+
+            <button type="submit" class="btn btn-primary">保存更改</button>
+        </form>
+    </div>
+
+
+{% endblock %}

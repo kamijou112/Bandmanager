@@ -1,0 +1,9 @@
+{% extends  'band/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        {{ gender_pie_html |safe }}
+        {{ occupation_pie_html |safe }}
+        {{ education_pie_html |safe }}
+
+    </div>
+{% endblock %}

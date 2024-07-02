@@ -1,0 +1,58 @@
+{% extends  'fan/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post" action="/app/fan/info/" class="shadow p-3 mb-5 bg-white rounded">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               value="{{ fan.user.username }}" required disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label">姓名:</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="{{ fan.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">性别:</label>
+                        <select class="form-control" id="gender" name="gender" required>
+                            {% for choice in fan.GENDER_CHOICES %}
+                                <option value="{{ choice.0 }}" {% if fan.gender == choice.0 %} selected {% endif %}>
+                                    {{ choice.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="age" class="form-label">年龄:</label>
+                        <input type="number" class="form-control" id="age" name="age" value="{{ fan.age }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="occupation" class="form-label">Occupation:</label>
+                        <input type="text" class="form-control" id="occupation" name="occupation"
+                               value="{{ fan.occupation }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="education" class="form-label">Education:</label>
+                        <select class="form-control" id="education" name="education" required>
+                            {% for choice in fan.EDUCATION_CHOICES %}
+                                <option value="{{ choice.0 }}" {% if fan.education == choice.0 %} selected {% endif %}>
+                                    {{ choice.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

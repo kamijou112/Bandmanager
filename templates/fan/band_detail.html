@@ -1,0 +1,113 @@
+{% extends 'fan/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>{{ band.name }}信息</h2>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>乐队名称</th>
+                <td>{{ band.name }}</td>
+            </tr>
+            <tr>
+                <th>成立时间</th>
+                <td>{{ band.formation_date }}</td>
+            </tr>
+            <tr>
+                <th>介绍</th>
+                <td>{{ band.introduction }}</td>
+            </tr>
+
+            <tr>
+                <th>队长</th>
+                <td>{{ band.captain.name }}</td>
+            </tr>
+            <tr>
+                <th>成员人数</th>
+                <td>{{ band.bandmember_set.count }}</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    {% if band.like %}
+                        <button class="btn btn-default" role="button" onclick="like({{ band.id }})" id='like_button'>
+                            Unlike
+                        </button>
+                    {% else %}
+                        <button class="btn btn-default" role="button" onclick="like({{ band.id }})" id="like_button">
+                            Like
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>乐队成员</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>角色</th>
+                <th>加入时间</th>
+            </thead>
+            <tbody>
+            {% for bandmember in band.bandmember_set.all %}
+                <tr>
+                    <td>{{ bandmember.name }}</td>
+                    <td>{{ bandmember.gender }}</td>
+                    <td>{{ bandmember.age }}</td>
+                    <td>{{ bandmember.role }}</td>
+                    <td>{{ bandmember.join_date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>乐队专辑</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>专辑名称</th>
+                <th>发行时间</th>
+                <th>介绍</th>
+                <th>乐队</th>
+                <th>评分</th>
+            </thead>
+            <tbody>
+            {% for album in band.album_set.all %}
+                <tr>
+                    <td><a href="/app/fan/album/{{ album.id }}">{{ album.name }}</a></td>
+                    <td>{{ album.release_date }}</td>
+                    <td>{{ album.description }}</td>
+                    <td>{{ album.band.name }}</td>
+                    <td>{{ album.average_rating }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function like(item_id) {
+            $.get('/app/fan/like_band/' + item_id, function (response) {
+                if (response.status = 'success') {
+                    let likeButton = $('#like_button');
+                    let buttonText = likeButton.text();
+                    let trimmedText = buttonText.trim();
+                    likeButton.text(trimmedText);
+                    if (likeButton.text() === 'Like') {
+                        likeButton.text('Unlike');
+                    } else {
+                        likeButton.text('Like');
+                    }
+
+                } else {
+                    window.location.href = '/login';
+                }
+            });
+        }
+    </script>
+
+{% endblock %}
