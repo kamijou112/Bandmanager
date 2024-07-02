@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce</title>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <script src="/static/js/bootstrap.min.js"></script>
+
+
+    <style>
+        .table td {
+            vertical-align: middle;
+        }
+
+        body {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar" style="background-color: #08080B; color: #FFFFFF;" id="login">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                音乐人网
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-orderple-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/app/fan/band">乐队</a></li>
+                <li><a href="/app/fan/album">专辑</a></li>
+                <li><a href="/app/fan/song">歌曲</a></li>
+                <li><a href="/app/fan/concert">演唱会</a></li>
+                <li><a href="/app/my_like">我的喜欢</a></li>
+
+                {% if not request.user %}
+                    <li><a href="/app/login">Login</a></li>
+                    <li><a href="/app/register">Register</a></li>
+                {% else %}
+                    <li ><a href="/app/fan/info">Welcome,{{ request.user.username }}</a></li>
+                    <li><a href="/app/logout">Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block content %}
+{% endblock %}

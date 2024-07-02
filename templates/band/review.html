@@ -1,0 +1,24 @@
+{% extends  'band/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <h1 style="text-align: center">《{{ album.name }}》专辑的评论</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>评论内容</th>
+                <th>评分</th>
+                <th>评论人</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for comment in comments %}
+                <tr>
+                    <td>{{ comment.comment }}</td>
+                    <td>{{ comment.rating }}</td>
+                    <td>{{ comment.fan.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

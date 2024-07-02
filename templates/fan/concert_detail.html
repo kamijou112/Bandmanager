@@ -1,0 +1,59 @@
+{% extends 'fan/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>{{ concert.name }}信息</h2>
+        <table class="table">
+            <tr>
+                <th>演唱会名称</th>
+                <td style="color: red; font-size: 20px">{{ concert.name }}</td>
+            </tr>
+            <tr>
+                <th>举办时间</th>
+                <td>{{ concert.date }}</td>
+            </tr>
+            <tr>
+                <th>地点</th>
+                <td>{{ concert.location }}</td>
+            </tr>
+            <tr>
+                <th>乐队</th>
+                <td><a href="/app/fan/band/{{ concert.band.id }}">{{ concert.band }}</a></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    {% if concert.attend %}
+                        <button class="btn btn-default" role="button" onclick="like({{ concert.id }})" id='like_button'>
+                            取消参加
+                        </button>
+                    {% else %}
+                        <button class="btn btn-default" role="button" onclick="like({{ concert.id }})" id="like_button">
+                            参加
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        function like(item_id) {
+            $.get('/app/fan/attend_concert/' + item_id, function (response) {
+                if (response.status = 'success') {
+                    let likeButton = $('#like_button');
+                    let buttonText = likeButton.text();
+                    let trimmedText = buttonText.trim();
+                    likeButton.text(trimmedText);
+                    if (likeButton.text() === '参加') {
+                        likeButton.text('取消参加');
+                    } else {
+                        likeButton.text('参加');
+                    }
+
+                } else {
+                    window.location.href = '/login';
+                }
+            });
+        }
+    </script>
+{% endblock %}

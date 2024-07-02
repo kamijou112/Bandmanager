@@ -1,0 +1,40 @@
+{% extends  'fan/base.html' %}
+{% block content %}
+    <form class="form-inline" method="GET" action="/app/fan/band/" style="margin-left: 30%;margin-top: 5%">
+        <input class="form-control" type="search" aria-label="搜索" name="keyword" style="width:50%"
+               {% if keyword %}value="{{ keyword }}"{% endif %} id="search-input">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+    </form>
+    <div class="container mt-5">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>名字</th>
+                <th>成立时间</th>
+                <th>简介</th>
+                <th>成员人数</th>
+                <th>查看详细</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for band in bands %}
+                <tr>
+                    <td>{{ band.name }}</td>
+                    <td>{{ band.formation_date }}</td>
+                    <td>{{ band.introduction }}</td>
+                    <td>{{ band.member_count }}</td>
+                    <td><a class="btn btn-info" href="/app/fan/band/{{ band.id }}">查看详细</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

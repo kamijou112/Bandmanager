@@ -1,0 +1,126 @@
+{% extends  'band/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h2 class="mb-4">专辑管理</h2>
+        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addAlbumModal">
+            添加专辑
+        </button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>发表时间</th>
+                <th>文案</th>
+                <th>所属乐队</th>
+                <th>评分</th>
+                <th>详细信息</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for album in albums %}
+                <tr>
+                    <td>{{ album.id }}</td>
+                    <td><a href="/app/album/song/{{ album.id }}">{{ album.name }}</a></td>
+                    <td>{{ album.release_date }}</td>
+                    <td>{{ album.description }}</td>
+                    <td>{{ album.band.name }}</td>
+                    <td>{{ album.average_rating }}</td>
+                    <td>
+                        <a href="/app/album/review/{{ album.id }}" class="btn btn-info">专辑评论</a>
+                        <a href="/app/album/fan/{{ album.id }}" class="btn btn-info">专辑粉丝</a>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#editAlbumModal{{ album.id }}">
+                            Edit
+                        </button>
+                        <a href="/app/band/album/delete/{{ album.id }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <div class="modal fade" id="editAlbumModal{{ album.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="editAlbumModalLabel{{ album.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editAlbumModalLabel{{ album.id }}">Edit Album</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/app/band/album/edit/{{ album.id }}">
+                                    {% csrf_token %}
+                                    <!-- Replace the following lines with the actual field names from your Album model -->
+                                    <label for="editAlbumName">专辑名称：</label>
+                                    <input type="text" id="editAlbumName" name="album_name" value="{{ album.name }}"
+                                           class="form-control" required>
+
+                                    <label for="editReleaseDate">发表日期：</label>
+                                    <input type="date" id="editReleaseDate" name="release_date"
+                                           value="{{ album.release_date | date:'Y-m-d' }}"
+                                           class="form-control" required>
+
+                                    <label for="editDescription">文案：</label>
+                                    <textarea id="editDescription" name="description" class="form-control"
+                                              rows="3" required>{{ album.description }}</textarea>
+
+                                    <!-- Add any other fields from your Album model as needed -->
+
+                                    <button type="submit" class="btn btn-primary mt-2">保存修改</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="modal fade" id="addAlbumModal" tabindex="-1" role="dialog" aria-labelledby="addAlbumModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAlbumModalLabel">Add Album</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="/app/band/album/">
+                            {% csrf_token %}
+                            <label for="addAlbumName">专辑名称：</label>
+                            <input type="text" id="addAlbumName" name="album_name" class="form-control" required>
+
+                            <label for="addReleaseDate">发表日期：</label>
+                            <input type="date" id="addReleaseDate" name="release_date" class="form-control" required>
+
+                            <label for="addDescription">文案：</label>
+                            <textarea id="addDescription" name="description" class="form-control" rows="3"
+                                      required></textarea>
+
+
+                            <button type="submit" class="btn btn-primary mt-2">Add Album</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'band/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h2 class="mb-4">乐队演唱会管理</h2>
+        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addConcertModal">
+            添加演唱会
+        </button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>举办时间</th>
+                <th>地点</th>
+                <th>粉丝详情</th>
+                <th>所属乐队</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for concert in concerts %}
+                <tr>
+                    <td>{{ concert.id }}</td>
+                    <td>{{ concert.name }}</td>
+                    <td>{{ concert.date }}</td>
+                    <td>{{ concert.location }}</td>
+                    <td><a href="/app/concert/fan/{{ concert.id }}" class="btn btn-info">查看粉丝</a></td>
+                    <td>{{ concert.band.name }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#editConcertModal{{ concert.id }}">
+                            Edit
+                        </button>
+                        <a href="/app/band/concert/delete/{{ concert.id }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <div class="modal fade" id="editConcertModal{{ concert.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="editConcertModalLabel{{ concert.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editConcertModalLabel{{ concert.id }}">Edit Concert</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/app/band/concert/edit/{{ concert.id }}">
+                                    {% csrf_token %}
+                                    <label for="editConcertName">演唱会名称：</label>
+                                    <input type="text" id="editConcertName" name="concert_name"
+                                           value="{{ concert.name }}"
+                                           class="form-control" required>
+
+                                    <label for="editDate">举办日期：</label>
+                                    <input type="date" id="editDate" name="date"
+                                           value="{{ concert.date | date:'Y-m-d' }}"
+                                           class="form-control" required>
+
+                                    <label for="editLocation">地点：</label>
+                                    <input type="text" id="editLocation" name="location" value="{{ concert.location }}"
+                                           class="form-control" required>
+
+                                    <button type="submit" class="btn btn-primary mt-2">保存修改</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="modal fade" id="addConcertModal" tabindex="-1" role="dialog" aria-labelledby="addConcertModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addConcertModalLabel">Add Concert</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="/app/band/concert/">
+                            {% csrf_token %}
+                            <label for="addConcertName">演唱会名称：</label>
+                            <input type="text" id="addConcertName" name="concert_name" class="form-control" required>
+
+                            <label for="addConcertDate">举办日期：</label>
+                            <input type="date" id="addConcertDate" name="date" class="form-control" required>
+
+                            <label for="addConcertLocation">地点：</label>
+                            <input type="text" id="addConcertLocation" name="location" class="form-control" required>
+
+                            <button type="submit" class="btn btn-primary mt-2">Add Concert</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

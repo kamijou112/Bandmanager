@@ -1,0 +1,151 @@
+{% extends  'band/base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h2 class="mb-4">乐队成员管理</h2>
+        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addMemberModal">
+            添加乐队成员
+        </button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>分工</th>
+                <th>加入时间</th>
+                <th>离开时间</th>
+                <th>所属乐队</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for member in members %}
+                <tr>
+                    <td>{{ member.id }}</td>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.gender }}</td>
+                    <td>{{ member.age }}</td>
+                    <td>{{ member.role }}</td>
+                    <td>{{ member.join_date }}</td>
+                    <td>{{ member.leave_date }}</td>
+                    <td>{{ member.band.name }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#editModal{{ member.id }}">
+                            Edit
+                        </button>
+                        <a href="/app/band/member/delete/{{ member.id }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <div class="modal fade" id="editModal{{ member.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="editModalLabel{{ member.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel{{ member.id }}">Edit Band Member</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/app/band/member/edit/{{ member.id }}">
+                                    {% csrf_token %}
+                                    <label for="editMemberName">成员姓名：</label>
+                                    <input type="text" id="editMemberName" name="member_name" value="{{ member.name }}"
+                                           class="form-control" required>
+
+                                    <label for="editGender">性别：</label>
+
+
+                                    <select id="editGender" name="gender" class="form-control" required>
+                                        <option value="男" {% if member.gender == '男' %}selected{% endif %}>男</option>
+                                        <option value="女" {% if member.gender == '女' %}selected{% endif %}>女</option>
+                                    </select>
+
+
+                                    <label for="editAge">年龄：</label>
+                                    <input type="number" id="editAge" name="age" value="{{ member.age }}"
+                                           class="form-control" required>
+
+                                    <label for="editRole">角色：</label>
+                                    <input type="text" id="editRole" name="role" value="{{ member.role }}"
+                                           class="form-control" required>
+
+                                    <label for="editJoinDate">加入日期：</label>
+                                    <input type="date" id="editJoinDate" name="join_date"
+                                           value="{{ member.join_date | date:'Y-m-d' }}"
+                                           class="form-control" required>
+
+                                    <label for="editLeaveDate">离开日期（可选）：</label>
+                                    <input type="date" id="editLeaveDate" name="leave_date"
+                                           value="{{ member.leave_date }}" class="form-control">
+
+
+                                    <button type="submit" class="btn btn-primary mt-2">保存修改</button>
+                                </form>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="modal fade" id="addMemberModal" tabindex="-1" role="dialog" aria-labelledby="addMemberModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addMemberModalLabel">Add Band Member</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="/app/band/member/">
+                            {% csrf_token %}
+                            <label>姓名</label>
+                            <input type="text" class="form-control" name="name" required>
+
+                            <label>性别</label>
+                            <select class="form-control" name="gender" required>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+
+
+                            <label>年龄</label>
+                            <input type="number" class="form-control" name="age" required>
+
+                            <label>角色</label>
+                            <input type="text" class="form-control" name="role" required>
+
+                            <label>加入日期</label>
+                            <input type="date" class="form-control" name="join_date" required>
+
+                            <label>Leave Date (optional)</label>
+                            <input type="date" class="form-control" name="leave_date">
+
+                            <button type="submit" class="btn btn-primary mt-2">Add Member</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
